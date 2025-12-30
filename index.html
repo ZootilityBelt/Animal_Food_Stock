@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Food Stock - Input</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Animal Food Stock</h1>
+            <p class="subtitle">Log daily stock movements</p>
+        </header>
+
+        <form id="stockForm">
+
+            <!-- DATE & BON -->
+            <div class="form-group grid-2">
+                <div class="input-wrapper">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" required />
+                </div>
+                <div class="input-wrapper">
+                    <label for="bonNo">Bon No</label>
+                    <input type="text" id="bonNo" placeholder="Reference / Bon number" />
+                </div>
+            </div>
+
+            <!-- ITEM DROPDOWN -->
+            <div class="form-group">
+                <label for="itemSelect">Animal Food Item</label>
+                <div class="select-wrapper">
+                    <select id="itemSelect" required>
+                        <option value="">-- Select Item --</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- HIDDEN ITEM ID -->
+            <input type="hidden" id="itemId" />
+
+            <!-- UNIT -->
+            <div class="form-group">
+                <label for="unit">Unit</label>
+                <input type="text" id="unit" readonly placeholder="Auto-filled" />
+            </div>
+
+            <!-- SOURCE -->
+            <div class="form-group">
+                <label for="source">Source / Destination</label>
+                <input type="text" id="source" placeholder="Supplier, enclosure, kitchen, etc." />
+            </div>
+
+            <!-- STOCK MOVEMENT -->
+            <div class="form-group grid-2">
+                <div class="input-wrapper">
+                    <label for="masuk">Masuk (In)</label>
+                    <input type="number" id="masuk" value="0" min="0" step="any" />
+                </div>
+                <div class="input-wrapper">
+                    <label for="keluar">Keluar (Out)</label>
+                    <input type="number" id="keluar" value="0" min="0" step="any" />
+                </div>
+            </div>
+
+            <!-- SUBMIT -->
+            <button type="submit" id="submitBtn">
+                <span class="btn-text">Submit Stock Entry</span>
+                <span class="loader"></span>
+            </button>
+
+        </form>
+
+        <!-- MESSAGE -->
+        <div id="messageContainer" class="message-container"></div>
+    </div>
+
+    <!-- SCRIPT -->
+    <script src="script.js"></script>
+</body>
+
+</html>
