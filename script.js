@@ -1,4 +1,5 @@
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw1rOBGVodrorbBVR4OsMoEK-iuyT68EUMNru-FsM2qPxfEZvRZPXlV0G5PKJkNWx0FsA/exec";
+const BASE_URL = "https://script.google.com/macros/s/AKfycbw1rOBGVodrorbBVR4OsMoEK-iuyT68EUMNru-FsM2qPxfEZvRZPXlV0G5PKJkNWx0FsA/exec";
+const GET_ITEMS_URL = `${BASE_URL}?action=getItemList`;
 
 // Elements
 const stockForm = document.getElementById("stockForm");
@@ -13,7 +14,7 @@ const messageContainer = document.getElementById("messageContainer");
 document.addEventListener("DOMContentLoaded", loadItemList);
 
 function loadItemList() {
-    fetch(`${WEB_APP_URL}?action=getItemList`)
+    fetch(GET_ITEMS_URL)
         .then(res => res.json())
         .then(response => {
             if (response.status !== "success") {
@@ -68,7 +69,7 @@ stockForm.addEventListener("submit", function (e) {
 
     const params = new URLSearchParams(formData);
 
-    fetch(WEB_APP_URL, {
+    fetch(BASE_URL, {
         method: "POST",
         mode: "no-cors",
         headers: {
