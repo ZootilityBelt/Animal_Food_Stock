@@ -1,5 +1,5 @@
-const BASE_URL = "https://script.google.com/macros/s/AKfycbw1rOBGVodrorbBVR4OsMoEK-iuyT68EUMNru-FsM2qPxfEZvRZPXlV0G5PKJkNWx0FsA/exec";
-const GET_ITEMS_URL = `${BASE_URL}?action=getItemList`;
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw1rOBGVodrorbBVR4OsMoEK-iuyT68EUMNru-FsM2qPxfEZvRZPXlV0G5PKJkNWx0FsA/exec";
+const GET_ITEMS_URL = `${WEB_APP_URL}?action=getItemList`;
 
 // Elements
 const stockForm = document.getElementById("stockForm");
@@ -158,7 +158,7 @@ async function handleFormSubmit(e) {
     console.log("Submitting Payload:", formData); // Debug log
 
     try {
-        await fetch(BASE_URL, {
+        await fetch(WEB_APP_URL, {
             method: "POST",
             mode: "no-cors", // Revert to no-cors for GAS compatibility
             headers: {
