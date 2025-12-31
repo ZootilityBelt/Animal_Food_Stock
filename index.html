@@ -6,159 +6,278 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Animal Food Stock Management</title>
     <link rel="stylesheet" href="style.css">
+    <!-- STYLE_PLACEHOLDER -->
 </head>
 
 <body>
     <div class="container">
         <div class="header">
-            <h1>🐾 Animal Food Stock Management</h1>
-            <p>Track and manage your animal food inventory with ease</p>
+            <div class="language-switcher">
+                <button class="lang-btn active" onclick="switchLanguage('en')" id="langBtnEn">🇬🇧 EN</button>
+                <button class="lang-btn" onclick="switchLanguage('id')" id="langBtnId">🇮🇩 ID</button>
+            </div>
+            <h1 data-lang-en="🐾 Animal Food Stock Management" data-lang-id="🐾 Manajemen Stok Makanan Hewan">🐾 Animal
+                Food Stock Management</h1>
+            <p data-lang-en="Track and manage your animal food inventory with ease"
+                data-lang-id="Kelola inventori makanan hewan Anda dengan mudah">Track and manage your animal food
+                inventory with ease</p>
         </div>
 
         <div class="config-section">
-            <h2>⚙️ API Configuration</h2>
+            <h2 data-lang-en="⚙️ API Configuration" data-lang-id="⚙️ Konfigurasi API">⚙️ API Configuration</h2>
             <div class="input-group">
-                <label for="apiUrl">Google Apps Script Web App URL:</label>
+                <label for="apiUrl" data-lang-en="Google Apps Script Web App URL:"
+                    data-lang-id="URL Web App Google Apps Script:">Google Apps Script Web App URL:</label>
                 <input type="text" id="apiUrl" placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">
             </div>
-            <button class="btn" onclick="saveApiUrl()">Save Configuration</button>
+            <button class="btn" onclick="saveApiUrl()" data-lang-en="Save Configuration"
+                data-lang-id="Simpan Konfigurasi">Save Configuration</button>
         </div>
 
         <div id="alertContainer"></div>
 
         <div class="tabs">
-            <div class="tab active" onclick="switchTab('dashboard')">📊 Dashboard</div>
-            <div class="tab" onclick="switchTab('stock')">📦 Stock Entry</div>
-            <div class="tab" onclick="switchTab('items')">📝 Item Management</div>
-            <div class="tab" onclick="switchTab('history')">📜 Stock History</div>
-            <div class="tab" onclick="switchTab('reports')">📄 Reports</div>
+            <div class="tab active" onclick="switchTab('dashboard')" data-lang-en="📊 Dashboard"
+                data-lang-id="📊 Dasbor">📊 Dashboard</div>
+            <div class="tab" onclick="switchTab('charts')" data-lang-en="📈 Analytics" data-lang-id="📈 Analitik">📈
+                Analytics</div>
+            <div class="tab" onclick="switchTab('stock')" data-lang-en="📦 Stock Entry" data-lang-id="📦 Entri Stok">📦
+                Stock Entry</div>
+            <div class="tab" onclick="switchTab('items')" data-lang-en="📝 Item Management"
+                data-lang-id="📝 Manajemen Item">📝 Item Management</div>
+            <div class="tab" onclick="switchTab('history')" data-lang-en="📜 Stock History"
+                data-lang-id="📜 Riwayat Stok">📜 Stock History</div>
+            <div class="tab" onclick="switchTab('reports')" data-lang-en="📄 Reports" data-lang-id="📄 Laporan">📄
+                Reports</div>
         </div>
 
         <!-- Dashboard Tab -->
         <div id="dashboard" class="tab-content active">
-            <h2>Current Stock Overview</h2>
+            <h2 data-lang-en="Current Stock Overview" data-lang-id="Ringkasan Stok Saat Ini">Current Stock Overview</h2>
             <div class="stats-grid">
                 <div class="stat-card">
                     <h3 id="totalItems">0</h3>
-                    <p>Total Items</p>
+                    <p data-lang-en="Total Items" data-lang-id="Total Item">Total Items</p>
                 </div>
                 <div class="stat-card">
                     <h3 id="lowStock">0</h3>
-                    <p>Low Stock Items</p>
+                    <p data-lang-en="Low Stock Items" data-lang-id="Item Stok Rendah">Low Stock Items</p>
                 </div>
                 <div class="stat-card">
                     <h3 id="totalValue">0</h3>
-                    <p>Total Transactions</p>
+                    <p data-lang-en="Total Transactions" data-lang-id="Total Transaksi">Total Transactions</p>
                 </div>
             </div>
 
-            <button class="btn" onclick="loadDashboard()">🔄 Refresh Dashboard</button>
+            <button class="btn" onclick="loadDashboard()" data-lang-en="🔄 Refresh Dashboard"
+                data-lang-id="🔄 Muat Ulang Dasbor">🔄 Refresh Dashboard</button>
 
             <div class="loading" id="dashboardLoading">
                 <div class="spinner"></div>
-                <p>Loading data...</p>
+                <p data-lang-en="Loading data..." data-lang-id="Memuat data...">Loading data...</p>
             </div>
 
             <div class="table-container">
-                <input type="text" class="search-box" id="dashboardSearch" placeholder="🔍 Search items..."
-                    onkeyup="filterDashboardTable()">
+                <input type="text" class="search-box" id="dashboardSearch" data-lang-en="🔍 Search items..."
+                    data-lang-id="🔍 Cari item..." placeholder="🔍 Search items..." onkeyup="filterDashboardTable()">
                 <table id="dashboardTable">
                     <thead>
                         <tr>
-                            <th>Item ID</th>
-                            <th>Item Name</th>
-                            <th>Category</th>
-                            <th>Unit</th>
-                            <th>Current Balance</th>
-                            <th>Total In</th>
-                            <th>Total Out</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th data-lang-en="Item ID" data-lang-id="ID Item">Item ID</th>
+                            <th data-lang-en="Item Name" data-lang-id="Nama Item">Item Name</th>
+                            <th data-lang-en="Category" data-lang-id="Kategori">Category</th>
+                            <th data-lang-en="Unit" data-lang-id="Satuan">Unit</th>
+                            <th data-lang-en="Current Balance" data-lang-id="Saldo Saat Ini">Current Balance</th>
+                            <th data-lang-en="Total In" data-lang-id="Total Masuk">Total In</th>
+                            <th data-lang-en="Total Out" data-lang-id="Total Keluar">Total Out</th>
+                            <th data-lang-en="Status" data-lang-id="Status">Status</th>
+                            <th data-lang-en="Actions" data-lang-id="Aksi">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="dashboardBody">
                         <tr>
-                            <td colspan="9" style="text-align: center; color: #999;">Click "Refresh Dashboard" to load
-                                data</td>
+                            <td colspan="9" style="text-align: center; color: #999;"
+                                data-lang-en="Click 'Refresh Dashboard' to load data"
+                                data-lang-id="Klik 'Muat Ulang Dasbor' untuk memuat data">Click "Refresh Dashboard" to
+                                load data</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
+        <!-- Analytics/Charts Tab -->
+        <div id="charts" class="tab-content">
+            <h2 data-lang-en="Stock Analytics & Visualizations" data-lang-id="Analitik & Visualisasi Stok">Stock
+                Analytics & Visualizations</h2>
+
+            <button class="btn" onclick="loadCharts()" data-lang-en="🔄 Refresh Charts"
+                data-lang-id="🔄 Muat Ulang Grafik">🔄 Refresh Charts</button>
+
+            <div class="loading" id="chartsLoading">
+                <div class="spinner"></div>
+                <p data-lang-en="Loading charts..." data-lang-id="Memuat grafik...">Loading charts...</p>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <h3 data-lang-en="Stock Balance by Category" data-lang-id="Saldo Stok per Kategori">Stock Balance by
+                    Category</h3>
+                <canvas id="categoryChart" style="max-height: 400px;"></canvas>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <h3 data-lang-en="Top 10 Items by Stock Balance" data-lang-id="10 Item Teratas Berdasarkan Saldo Stok">
+                    Top 10 Items by Stock Balance</h3>
+                <canvas id="topItemsChart" style="max-height: 400px;"></canvas>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <h3 data-lang-en="Stock In vs Stock Out (Top 10 Items)"
+                    data-lang-id="Stok Masuk vs Keluar (10 Item Teratas)">Stock In vs Stock Out (Top 10 Items)</h3>
+                <canvas id="inOutChart" style="max-height: 400px;"></canvas>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <h3 data-lang-en="Stock Status Distribution" data-lang-id="Distribusi Status Stok">Stock Status
+                    Distribution</h3>
+                <div style="max-width: 500px; margin: 0 auto;">
+                    <canvas id="statusPieChart"></canvas>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <h3 data-lang-en="Recent Transaction Trends (Last 30 Days)"
+                    data-lang-id="Tren Transaksi Terkini (30 Hari Terakhir)">Recent Transaction Trends (Last 30 Days)
+                </h3>
+                <canvas id="trendChart" style="max-height: 400px;"></canvas>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <h3 data-lang-en="Monthly Comparison (Last 6 Months)"
+                    data-lang-id="Perbandingan Bulanan (6 Bulan Terakhir)">Monthly Comparison (Last 6 Months)</h3>
+                <div class="form-grid" style="margin-bottom: 20px;">
+                    <div class="input-group">
+                        <label for="comparisonType" data-lang-en="Comparison Type"
+                            data-lang-id="Tipe Perbandingan">Comparison Type</label>
+                        <select id="comparisonType" onchange="updateMonthlyComparison()">
+                            <option value="overall" data-lang-en="Overall Stock Movement"
+                                data-lang-id="Pergerakan Stok Keseluruhan">Overall Stock Movement</option>
+                            <option value="category" data-lang-en="By Category" data-lang-id="Per Kategori">By Category
+                            </option>
+                            <option value="item" data-lang-en="Specific Item" data-lang-id="Item Spesifik">Specific Item
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <canvas id="monthlyComparisonChart" style="max-height: 400px;"></canvas>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <h3 data-lang-en="Year-over-Year Comparison" data-lang-id="Perbandingan Tahun ke Tahun">Year-over-Year
+                    Comparison</h3>
+                <div class="form-grid" style="margin-bottom: 20px;">
+                    <div class="input-group">
+                        <label for="yoyYear1" data-lang-en="First Year" data-lang-id="Tahun Pertama">First Year</label>
+                        <input type="number" id="yoyYear1" min="2020" max="2030" value="2023">
+                    </div>
+                    <div class="input-group">
+                        <label for="yoyYear2" data-lang-en="Second Year" data-lang-id="Tahun Kedua">Second Year</label>
+                        <input type="number" id="yoyYear2" min="2020" max="2030" value="2024">
+                    </div>
+                    <div class="input-group">
+                        <button class="btn" onclick="updateYearOverYearChart()" style="margin-top: 24px;"
+                            data-lang-en="Update Comparison" data-lang-id="Perbarui Perbandingan">Update
+                            Comparison</button>
+                    </div>
+                </div>
+                <canvas id="yoyChart" style="max-height: 400px;"></canvas>
+            </div>
+        </div>
+
         <!-- Stock Entry Tab -->
         <div id="stock" class="tab-content">
-            <h2>Add Stock Entry</h2>
+            <h2 data-lang-en="Add Stock Entry" data-lang-id="Tambah Entri Stok">Add Stock Entry</h2>
             <form id="stockForm">
                 <div class="form-grid">
                     <div class="input-group">
-                        <label for="stockDate">Date *</label>
+                        <label for="stockDate" data-lang-en="Date *" data-lang-id="Tanggal *">Date *</label>
                         <input type="date" id="stockDate" required>
                     </div>
                     <div class="input-group">
-                        <label for="bonNo">BON Number *</label>
+                        <label for="bonNo" data-lang-en="BON Number *" data-lang-id="Nomor BON *">BON Number *</label>
                         <input type="text" id="bonNo" placeholder="BON-001" required>
                     </div>
                     <div class="input-group">
-                        <label for="stockItem">Select Item *</label>
+                        <label for="stockItem" data-lang-en="Select Item *" data-lang-id="Pilih Item *">Select Item
+                            *</label>
                         <select id="stockItem" required onchange="updateItemDetails()">
-                            <option value="">-- Select Item --</option>
+                            <option value="" data-lang-en="-- Select Item --" data-lang-id="-- Pilih Item --">-- Select
+                                Item --</option>
                         </select>
                     </div>
                     <div class="input-group">
-                        <label for="stockSource">Source</label>
-                        <input type="text" id="stockSource" placeholder="Supplier name">
+                        <label for="stockSource" data-lang-en="Source" data-lang-id="Sumber">Source</label>
+                        <input type="text" id="stockSource" data-lang-en="Supplier name" data-lang-id="Nama pemasok"
+                            placeholder="Supplier name">
                     </div>
                 </div>
 
                 <div class="form-grid">
                     <div class="input-group">
-                        <label for="masuk">Stock In (Masuk)</label>
+                        <label for="masuk" data-lang-en="Stock In (Masuk)" data-lang-id="Stok Masuk">Stock In
+                            (Masuk)</label>
                         <input type="number" id="masuk" placeholder="0" min="0" step="0.01">
                     </div>
                     <div class="input-group">
-                        <label for="keluar">Stock Out (Keluar)</label>
+                        <label for="keluar" data-lang-en="Stock Out (Keluar)" data-lang-id="Stok Keluar">Stock Out
+                            (Keluar)</label>
                         <input type="number" id="keluar" placeholder="0" min="0" step="0.01">
                     </div>
                 </div>
 
                 <div class="action-buttons">
-                    <button type="submit" class="btn btn-success">✅ Add Stock Entry</button>
-                    <button type="button" class="btn btn-secondary" onclick="resetStockForm()">🔄 Reset Form</button>
+                    <button type="submit" class="btn btn-success" data-lang-en="✅ Add Stock Entry"
+                        data-lang-id="✅ Tambah Entri Stok">✅ Add Stock Entry</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetStockForm()"
+                        data-lang-en="🔄 Reset Form" data-lang-id="🔄 Reset Formulir">🔄 Reset Form</button>
                 </div>
             </form>
         </div>
 
         <!-- Item Management Tab -->
         <div id="items" class="tab-content">
-            <h2>Item Management</h2>
+            <h2 data-lang-en="Item Management" data-lang-id="Manajemen Item">Item Management</h2>
 
-            <button class="btn" onclick="openAddItemModal()">➕ Add New Item</button>
-            <button class="btn btn-secondary" onclick="loadItems()">🔄 Refresh Items</button>
+            <button class="btn" onclick="openAddItemModal()" data-lang-en="➕ Add New Item"
+                data-lang-id="➕ Tambah Item Baru">➕ Add New Item</button>
+            <button class="btn btn-secondary" onclick="loadItems()" data-lang-en="🔄 Refresh Items"
+                data-lang-id="🔄 Muat Ulang Item">🔄 Refresh Items</button>
 
             <div class="loading" id="itemsLoading">
                 <div class="spinner"></div>
-                <p>Loading items...</p>
+                <p data-lang-en="Loading items..." data-lang-id="Memuat item...">Loading items...</p>
             </div>
 
             <div class="table-container">
-                <input type="text" class="search-box" id="itemsSearch" placeholder="🔍 Search items..."
-                    onkeyup="filterItemsTable()">
+                <input type="text" class="search-box" id="itemsSearch" data-lang-en="🔍 Search items..."
+                    data-lang-id="🔍 Cari item..." placeholder="🔍 Search items..." onkeyup="filterItemsTable()">
                 <table id="itemsTable">
                     <thead>
                         <tr>
-                            <th>Item ID</th>
-                            <th>Item Name</th>
-                            <th>Category</th>
-                            <th>Unit</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th data-lang-en="Item ID" data-lang-id="ID Item">Item ID</th>
+                            <th data-lang-en="Item Name" data-lang-id="Nama Item">Item Name</th>
+                            <th data-lang-en="Category" data-lang-id="Kategori">Category</th>
+                            <th data-lang-en="Unit" data-lang-id="Satuan">Unit</th>
+                            <th data-lang-en="Status" data-lang-id="Status">Status</th>
+                            <th data-lang-en="Actions" data-lang-id="Aksi">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="itemsBody">
                         <tr>
-                            <td colspan="6" style="text-align: center; color: #999;">Click "Refresh Items" to load data
-                            </td>
+                            <td colspan="6" style="text-align: center; color: #999;"
+                                data-lang-en="Click 'Refresh Items' to load data"
+                                data-lang-id="Klik 'Muat Ulang Item' untuk memuat data">Click "Refresh Items" to load
+                                data</td>
                         </tr>
                     </tbody>
                 </table>
@@ -341,6 +460,8 @@
             </div>
         </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="script.js"></script>
 </body>
 
