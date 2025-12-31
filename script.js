@@ -4,6 +4,7 @@ const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw1rOBGVodrorbBVR4O
 const stockForm = document.getElementById("stockForm");
 const itemSelect = document.getElementById("itemSelect");
 const itemIdInput = document.getElementById("itemId");
+const categoryInput = document.getElementById("category");
 const unitInput = document.getElementById("unit");
 const submitBtn = document.getElementById("submitBtn");
 const messageContainer = document.getElementById("messageContainer");
@@ -26,7 +27,8 @@ function loadItemList() {
                 const option = document.createElement("option");
                 option.value = item.itemId;
                 option.textContent = item.itemName;
-                option.dataset.unit = item.unit;
+                option.dataset.category = item.category || "";
+                option.dataset.unit = item.unit || "";
                 itemSelect.appendChild(option);
             });
         })
@@ -40,6 +42,7 @@ function loadItemList() {
 itemSelect.addEventListener("change", function () {
     const selected = this.options[this.selectedIndex];
     itemIdInput.value = selected.value || "";
+    categoryInput.value = selected.dataset.category || "";
     unitInput.value = selected.dataset.unit || "";
 });
 
@@ -55,6 +58,7 @@ stockForm.addEventListener("submit", function (e) {
         date: document.getElementById("date").value,
         itemId: itemIdInput.value,
         itemName: selectedOption ? selectedOption.text : "",
+        category: categoryInput.value,
         bonNo: document.getElementById("bonNo").value,
         source: document.getElementById("source").value,
         masuk: document.getElementById("masuk").value,
@@ -76,6 +80,7 @@ stockForm.addEventListener("submit", function (e) {
             showMessage("Stock entry submitted successfully!", "success");
             stockForm.reset();
             itemIdInput.value = "";
+            categoryInput.value = "";
             unitInput.value = "";
         })
         .catch(error => {
