@@ -11,6 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="icon.png">
+
     <!-- Styles -->
     <link rel="stylesheet" href="style.css" />
 </head>
@@ -38,11 +41,17 @@
 
             <!-- ITEM DROPDOWN -->
             <div class="form-group">
-                <label for="itemSelect">Animal Food Item</label>
+                <div class="label-row">
+                    <label for="itemSelect">Animal Food Item</label>
+                    <a href="#" id="toggleModeBtn" class="toggle-link">Add New Item</a>
+                </div>
                 <div class="select-wrapper">
+                    <!-- EXISTING ITEMS -->
                     <select id="itemSelect" required>
                         <option value="">-- Select Item --</option>
                     </select>
+                    <!-- NEW ITEM INPUT -->
+                    <input type="text" id="newItemName" class="hidden" placeholder="Enter new item name" />
                 </div>
             </div>
 

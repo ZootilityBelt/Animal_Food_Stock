@@ -4,14 +4,22 @@ const GET_ITEMS_URL = `${BASE_URL}?action=getItemList`;
 // Elements
 const stockForm = document.getElementById("stockForm");
 const itemSelect = document.getElementById("itemSelect");
+const newItemNameInput = document.getElementById("newItemName");
+const toggleModeBtn = document.getElementById("toggleModeBtn");
 const itemIdInput = document.getElementById("itemId");
 const categoryInput = document.getElementById("category");
 const unitInput = document.getElementById("unit");
 const submitBtn = document.getElementById("submitBtn");
 const messageContainer = document.getElementById("messageContainer");
 
+// State
+let isCustomMode = false;
+
 // 1. Fetch Item List on Load
-document.addEventListener("DOMContentLoaded", loadItemList);
+document.addEventListener("DOMContentLoaded", function () {
+    loadItemList();
+    setupEventListeners();
+});
 
 function loadItemList() {
     fetch(GET_ITEMS_URL)
@@ -39,59 +47,144 @@ function loadItemList() {
         });
 }
 
-// 2. Handle Item Selection
-itemSelect.addEventListener("change", function () {
-    const selected = this.options[this.selectedIndex];
-    itemIdInput.value = selected.value || "";
-    categoryInput.value = selected.dataset.category || "";
-    unitInput.value = selected.dataset.unit || "";
-});
+function setupEventListeners() {
+    // Toggle Mode
+    toggleModeBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        toggleCustomMode();
+    });
 
-// 3. Handle Form Submission
-stockForm.addEventListener("submit", function (e) {
+    // Handle Item Selection (Standard Mode)
+    itemSelect.addEventListener("change", function () {
+        if (!isCustomMode) {
+            const selected = this.options[this.selectedIndex];
+            itemIdInput.value = selected.value || "";
+            categoryInput.value = selected.dataset.category || "";
+            unitInput.value = selected.dataset.unit || "";
+        }
+    });
+
+    // Handle Form Submission
+    stockForm.addEventListener("submit", handleFormSubmit);
+}
+
+function toggleCustomMode() {
+    isCustomMode = !isCustomMode;
+
+    if (isCustomMode) {
+        // Switch to Custom Mode
+        itemSelect.classList.add("hidden");
+        newItemNameInput.classList.remove("hidden");
+        toggleModeBtn.textContent = "Select Existing Item";
+
+        // Enable editing for Category and Unit
+        categoryInput.removeAttribute("readonly");
+        unitInput.removeAttribute("readonly");
+        categoryInput.classList.add("editable-highlight");
+        unitInput.classList.add("editable-highlight");
+
+        // Update Requirements
+        itemSelect.removeAttribute("required");
+        newItemNameInput.setAttribute("required", "true");
+        categoryInput.setAttribute("required", "true"); // Typically needed for new items
+        unitInput.setAttribute("required", "true");
+
+        // Clear values
+        clearInputs();
+        itemIdInput.value = "CUSTOM"; // Marker for backend
+    } else {
+        // Switch back to Standard Mode
+        itemSelect.classList.remove("hidden");
+        newItemNameInput.classList.add("hidden");
+        toggleModeBtn.textContent = "Add New Item";
+
+        // Disable editing
+        categoryInput.setAttribute("readonly", "true");
+        unitInput.setAttribute("readonly", "true");
+        categoryInput.classList.remove("editable-highlight");
+        unitInput.classList.remove("editable-highlight");
+
+        // Update Requirements
+        itemSelect.setAttribute("required", "true");
+        newItemNameInput.removeAttribute("required");
+        categoryInput.removeAttribute("required"); // Auto-filled, so implicit
+        unitInput.removeAttribute("required");
+
+        // Reset inputs
+        clearInputs();
+        itemSelect.value = "";
+    }
+}
+
+function clearInputs() {
+    newItemNameInput.value = "";
+    itemIdInput.value = "";
+    categoryInput.value = "";
+    unitInput.value = "";
+}
+
+async function handleFormSubmit(e) {
     e.preventDefault();
 
     setLoading(true);
     hideMessage();
 
-    const selectedOption = itemSelect.options[itemSelect.selectedIndex];
+    // Prepare Data
+    let itemNameValue;
+    let itemIdValue;
+
+    if (isCustomMode) {
+        itemNameValue = newItemNameInput.value.trim();
+        itemIdValue = "CUSTOM"; // Or let backend assign specific ID
+    } else {
+        const selectedOption = itemSelect.options[itemSelect.selectedIndex];
+        itemNameValue = selectedOption ? selectedOption.text : "";
+        itemIdValue = itemIdInput.value;
+    }
+
     const formData = {
         date: document.getElementById("date").value,
-        itemId: itemIdInput.value,
-        itemName: selectedOption ? selectedOption.text : "",
-        category: categoryInput.value,
+        itemId: itemIdValue,
+        itemName: itemNameValue,
+        category: categoryInput.value.trim(),
         bonNo: document.getElementById("bonNo").value,
         source: document.getElementById("source").value,
         masuk: document.getElementById("masuk").value,
         keluar: document.getElementById("keluar").value,
-        unit: unitInput.value
+        unit: unitInput.value.trim()
     };
 
     const params = new URLSearchParams(formData);
 
-    fetch(BASE_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: params.toString()
-    })
-        .then(() => {
-            showMessage("Stock entry submitted successfully!", "success");
-            stockForm.reset();
-            itemIdInput.value = "";
-            categoryInput.value = "";
-            unitInput.value = "";
-        })
-        .catch(error => {
-            console.error("Submission error:", error);
-            showMessage("Failed to submit. Please try again.", "error");
-        })
-        .finally(() => {
-            setLoading(false);
+    try {
+        await fetch(BASE_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: params.toString()
         });
-});
+
+        // Success Handling
+        showMessage("Stock entry submitted successfully!", "success");
+        stockForm.reset();
+
+        // Reset state after success
+        if (isCustomMode) {
+            toggleCustomMode(); // Return to standard mode? Or stay? Let's return for safety.
+        } else {
+            clearInputs();
+            itemSelect.value = "";
+        }
+
+    } catch (error) {
+        console.error("Submission error:", error);
+        showMessage("Failed to submit. Please try again.", "error");
+    } finally {
+        setLoading(false);
+    }
+}
 
 // Helpers
 function showMessage(text, type) {
