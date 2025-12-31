@@ -1,4 +1,4 @@
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwtJ5i2IZYjrd3Xku7bosyzt0xxfRpeoiViRcZfCIhptMzHFpGNIYCIUT2YZFfMZP6dWQ/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw1rOBGVodrorbBVR4OsMoEK-iuyT68EUMNru-FsM2qPxfEZvRZPXlV0G5PKJkNWx0FsA/exec";
 
 const stockForm = document.getElementById("stockForm");
 const itemSelect = document.getElementById("itemSelect");
