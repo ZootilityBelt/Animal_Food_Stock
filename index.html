@@ -2,105 +2,345 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animal Food Stock - Input</title>
-
-    <!-- Google Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="icon.png">
-
-    <!-- Styles -->
-    <link rel="stylesheet" href="style.css" />
+    <title>Animal Food Stock Management</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <div class="container">
-        <header>
-            <h1>Animal Food Stock</h1>
-            <p class="subtitle">Log daily stock movements</p>
-        </header>
+        <div class="header">
+            <h1>🐾 Animal Food Stock Management</h1>
+            <p>Track and manage your animal food inventory with ease</p>
+        </div>
 
-        <form id="stockForm">
+        <div class="config-section">
+            <h2>⚙️ API Configuration</h2>
+            <div class="input-group">
+                <label for="apiUrl">Google Apps Script Web App URL:</label>
+                <input type="text" id="apiUrl" placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">
+            </div>
+            <button class="btn" onclick="saveApiUrl()">Save Configuration</button>
+        </div>
 
-            <!-- DATE & BON -->
-            <div class="form-group grid-2">
-                <div class="input-wrapper">
-                    <label for="date">Date</label>
-                    <input type="date" id="date" required />
+        <div id="alertContainer"></div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('dashboard')">📊 Dashboard</div>
+            <div class="tab" onclick="switchTab('stock')">📦 Stock Entry</div>
+            <div class="tab" onclick="switchTab('items')">📝 Item Management</div>
+            <div class="tab" onclick="switchTab('history')">📜 Stock History</div>
+            <div class="tab" onclick="switchTab('reports')">📄 Reports</div>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <h2>Current Stock Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 id="totalItems">0</h3>
+                    <p>Total Items</p>
                 </div>
-                <div class="input-wrapper">
-                    <label for="bonNo">Bon No</label>
-                    <input type="text" id="bonNo" placeholder="Reference / Bon number" />
+                <div class="stat-card">
+                    <h3 id="lowStock">0</h3>
+                    <p>Low Stock Items</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalValue">0</h3>
+                    <p>Total Transactions</p>
                 </div>
             </div>
 
-            <!-- ITEM DROPDOWN -->
-            <div class="form-group">
-                <div class="label-row">
-                    <label for="itemSelect">Animal Food Item</label>
-                    <a href="#" id="toggleModeBtn" class="toggle-link">Add New Item</a>
+            <button class="btn" onclick="loadDashboard()">🔄 Refresh Dashboard</button>
+
+            <div class="loading" id="dashboardLoading">
+                <div class="spinner"></div>
+                <p>Loading data...</p>
+            </div>
+
+            <div class="table-container">
+                <input type="text" class="search-box" id="dashboardSearch" placeholder="🔍 Search items..."
+                    onkeyup="filterDashboardTable()">
+                <table id="dashboardTable">
+                    <thead>
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Item Name</th>
+                            <th>Category</th>
+                            <th>Unit</th>
+                            <th>Current Balance</th>
+                            <th>Total In</th>
+                            <th>Total Out</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dashboardBody">
+                        <tr>
+                            <td colspan="9" style="text-align: center; color: #999;">Click "Refresh Dashboard" to load
+                                data</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Stock Entry Tab -->
+        <div id="stock" class="tab-content">
+            <h2>Add Stock Entry</h2>
+            <form id="stockForm">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="stockDate">Date *</label>
+                        <input type="date" id="stockDate" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="bonNo">BON Number *</label>
+                        <input type="text" id="bonNo" placeholder="BON-001" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="stockItem">Select Item *</label>
+                        <select id="stockItem" required onchange="updateItemDetails()">
+                            <option value="">-- Select Item --</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="stockSource">Source</label>
+                        <input type="text" id="stockSource" placeholder="Supplier name">
+                    </div>
                 </div>
-                <div class="select-wrapper">
-                    <!-- EXISTING ITEMS -->
-                    <select id="itemSelect" required>
-                        <option value="">-- Select Item --</option>
+
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="masuk">Stock In (Masuk)</label>
+                        <input type="number" id="masuk" placeholder="0" min="0" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <label for="keluar">Stock Out (Keluar)</label>
+                        <input type="number" id="keluar" placeholder="0" min="0" step="0.01">
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button type="submit" class="btn btn-success">✅ Add Stock Entry</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetStockForm()">🔄 Reset Form</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Item Management Tab -->
+        <div id="items" class="tab-content">
+            <h2>Item Management</h2>
+
+            <button class="btn" onclick="openAddItemModal()">➕ Add New Item</button>
+            <button class="btn btn-secondary" onclick="loadItems()">🔄 Refresh Items</button>
+
+            <div class="loading" id="itemsLoading">
+                <div class="spinner"></div>
+                <p>Loading items...</p>
+            </div>
+
+            <div class="table-container">
+                <input type="text" class="search-box" id="itemsSearch" placeholder="🔍 Search items..."
+                    onkeyup="filterItemsTable()">
+                <table id="itemsTable">
+                    <thead>
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Item Name</th>
+                            <th>Category</th>
+                            <th>Unit</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="itemsBody">
+                        <tr>
+                            <td colspan="6" style="text-align: center; color: #999;">Click "Refresh Items" to load data
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Stock History Tab -->
+        <div id="history" class="tab-content">
+            <h2>Stock Transaction History</h2>
+
+            <div class="form-grid">
+                <div class="input-group">
+                    <label for="historyLimit">Number of Records</label>
+                    <select id="historyLimit">
+                        <option value="50">Last 50</option>
+                        <option value="100" selected>Last 100</option>
+                        <option value="200">Last 200</option>
+                        <option value="500">Last 500</option>
                     </select>
-                    <!-- NEW ITEM INPUT -->
-                    <input type="text" id="newItemName" class="hidden" placeholder="Enter new item name" />
                 </div>
             </div>
 
-            <!-- HIDDEN ITEM ID -->
-            <input type="hidden" id="itemId" />
+            <button class="btn" onclick="loadHistory()">🔄 Load History</button>
 
-            <!-- CATEGORY & UNIT -->
-            <div class="form-group grid-2">
-                <div class="input-wrapper">
-                    <label for="category">Category</label>
-                    <input type="text" id="category" readonly placeholder="Auto-filled" />
+            <div class="loading" id="historyLoading">
+                <div class="spinner"></div>
+                <p>Loading history...</p>
+            </div>
+
+            <div class="table-container">
+                <input type="text" class="search-box" id="historySearch" placeholder="🔍 Search transactions..."
+                    onkeyup="filterHistoryTable()">
+                <table id="historyTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>BON No</th>
+                            <th>Item ID</th>
+                            <th>Item Name</th>
+                            <th>Unit</th>
+                            <th>Source</th>
+                            <th>Stock In</th>
+                            <th>Stock Out</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyBody">
+                        <tr>
+                            <td colspan="8" style="text-align: center; color: #999;">Click "Load History" to view
+                                transactions</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Reports Tab -->
+        <div id="reports" class="tab-content">
+            <h2>Generate Reports</h2>
+
+            <div class="form-grid">
+                <div class="input-group">
+                    <label for="reportYear">Year</label>
+                    <input type="number" id="reportYear" min="2020" max="2030" value="2024">
                 </div>
-                <div class="input-wrapper">
-                    <label for="unit">Unit</label>
-                    <input type="text" id="unit" readonly placeholder="Auto-filled" />
+                <div class="input-group">
+                    <label for="reportMonth">Month</label>
+                    <select id="reportMonth">
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12" selected>December</option>
+                    </select>
                 </div>
             </div>
 
-            <!-- SOURCE -->
-            <div class="form-group">
-                <label for="source">Source / Destination</label>
-                <input type="text" id="source" placeholder="Supplier, enclosure, kitchen, etc." />
+            <div class="alert alert-info">
+                <strong>ℹ️ Note:</strong> Reports will be generated in your Google Sheets. Check the new sheet tabs
+                after generation.
             </div>
 
-            <!-- STOCK MOVEMENT -->
-            <div class="form-group grid-2">
-                <div class="input-wrapper">
-                    <label for="masuk">Masuk (In)</label>
-                    <input type="number" id="masuk" value="0" min="0" step="any" />
-                </div>
-                <div class="input-wrapper">
-                    <label for="keluar">Keluar (Out)</label>
-                    <input type="number" id="keluar" value="0" min="0" step="any" />
-                </div>
+            <div class="action-buttons">
+                <button class="btn btn-success" onclick="generateMonthlyReport()">📊 Generate Overall Report</button>
+                <button class="btn btn-secondary" onclick="openItemReportModal()">📄 Generate Item Report</button>
             </div>
+        </div>
 
-            <!-- SUBMIT -->
-            <button type="submit" id="submitBtn">
-                <span class="btn-text">Submit Stock Entry</span>
-                <span class="loader"></span>
-            </button>
+        <!-- Add Item Modal -->
+        <div id="addItemModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Add New Item</h2>
+                    <button class="close-modal" onclick="closeModal('addItemModal')">&times;</button>
+                </div>
+                <form id="addItemForm">
+                    <div class="input-group">
+                        <label for="newItemId">Item ID *</label>
+                        <input type="text" id="newItemId" placeholder="FD001" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="newItemName">Item Name *</label>
+                        <input type="text" id="newItemName" placeholder="Dog Food Premium" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="newItemCategory">Category *</label>
+                        <input type="text" id="newItemCategory" placeholder="Dog Food" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="newItemUnit">Unit *</label>
+                        <input type="text" id="newItemUnit" placeholder="kg" required>
+                    </div>
+                    <div class="action-buttons">
+                        <button type="submit" class="btn btn-success">✅ Add Item</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('addItemModal')">❌
+                            Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-        </form>
+        <!-- Item Details Modal -->
+        <div id="itemDetailsModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Item Stock Details</h2>
+                    <button class="close-modal" onclick="closeModal('itemDetailsModal')">&times;</button>
+                </div>
+                <div id="itemDetailsContent"></div>
+            </div>
+        </div>
 
-        <!-- MESSAGE -->
-        <div id="messageContainer" class="message-container"></div>
+        <!-- Item Report Modal -->
+        <div id="itemReportModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Generate Item Report</h2>
+                    <button class="close-modal" onclick="closeModal('itemReportModal')">&times;</button>
+                </div>
+                <form id="itemReportForm">
+                    <div class="input-group">
+                        <label for="reportItemSelect">Select Item *</label>
+                        <select id="reportItemSelect" required>
+                            <option value="">-- Select Item --</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="itemReportYear">Year</label>
+                        <input type="number" id="itemReportYear" min="2020" max="2030" value="2024">
+                    </div>
+                    <div class="input-group">
+                        <label for="itemReportMonth">Month</label>
+                        <select id="itemReportMonth">
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12" selected>December</option>
+                        </select>
+                    </div>
+                    <div class="action-buttons">
+                        <button type="submit" class="btn btn-success">📄 Generate Report</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('itemReportModal')">❌
+                            Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <!-- SCRIPT -->
     <script src="script.js"></script>
 </body>
 
