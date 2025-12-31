@@ -155,16 +155,21 @@ async function handleFormSubmit(e) {
     };
 
     const params = new URLSearchParams(formData);
+    console.log("Submitting Payload:", formData); // Debug log
 
     try {
         await fetch(BASE_URL, {
             method: "POST",
-            mode: "no-cors",
+            mode: "no-cors", // Revert to no-cors for GAS compatibility
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
             body: params.toString()
         });
+
+        // With no-cors, we can't check response.ok or response.json()
+        // We assume success if the fetch promise resolves.
+        console.log("Request sent (opaque response)");
 
         // Success Handling
         showMessage("Stock entry submitted successfully!", "success");
@@ -172,7 +177,7 @@ async function handleFormSubmit(e) {
 
         // Reset state after success
         if (isCustomMode) {
-            toggleCustomMode(); // Return to standard mode? Or stay? Let's return for safety.
+            toggleCustomMode();
         } else {
             clearInputs();
             itemSelect.value = "";
@@ -180,7 +185,7 @@ async function handleFormSubmit(e) {
 
     } catch (error) {
         console.error("Submission error:", error);
-        showMessage("Failed to submit. Please try again.", "error");
+        showMessage("Failed to submit: " + error.message, "error");
     } finally {
         setLoading(false);
     }
