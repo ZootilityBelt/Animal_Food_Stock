@@ -6,10 +6,11 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     background: linear-gradient(135deg, #10B981 0%, #047857 100%);
     min-height: 100vh;
     padding: 20px;
+    color: #1f2937;
 }
 
 .container {
@@ -19,23 +20,46 @@ body {
 
 .header {
     background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     margin-bottom: 30px;
-    text-align: center;
     position: relative;
 }
 
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.header-icon {
+    height: 120px;
+    width: auto;
+    object-fit: contain;
+}
+
+.header-text {
+    flex: 1;
+    text-align: left;
+}
+
 .header h1 {
-    color: #10B981;
-    font-size: 2.5em;
-    margin-bottom: 10px;
+    font-family: 'Outfit', sans-serif;
+    color: #065f46;
+    font-size: 2.8em;
+    margin-bottom: 8px;
+    line-height: 1.2;
+    font-weight: 700;
 }
 
 .header p {
-    color: #666;
-    font-size: 1.1em;
+    color: #4b5563;
+    font-size: 1.2em;
+    font-weight: 400;
+    max-width: 600px;
 }
 
 .language-switcher {
@@ -417,9 +441,47 @@ tr:hover {
     margin-bottom: 20px;
 }
 
+@media (max-width: 1024px) {
+    .header-content {
+        gap: 20px;
+    }
+
+    .header h1 {
+        font-size: 2.2em;
+    }
+}
+
 @media (max-width: 768px) {
+    .header {
+        padding: 30px 20px;
+    }
+
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .header-text {
+        text-align: center;
+    }
+
+    .header-icon {
+        height: 100px;
+    }
+
     .header h1 {
         font-size: 1.8em;
+    }
+
+    .header p {
+        font-size: 1em;
+        margin: 0 auto;
+    }
+
+    .language-switcher {
+        position: static;
+        justify-content: center;
+        margin-bottom: 25px;
     }
 
     .form-grid {
@@ -432,5 +494,15 @@ tr:hover {
 
     .tab {
         width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 1.5em;
+    }
+
+    .header-icon {
+        height: 80px;
     }
 }
