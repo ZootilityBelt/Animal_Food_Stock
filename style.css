@@ -381,32 +381,14 @@ tr:hover {
 .spinner {
     width: 64px;
     height: 64px;
-    background-image: url('pygmy_hippo_walk.png');
-    background-size: 128px 128px;
-    background-position: 0 0;
+    background-image: url('pygmy_hippo_v2_walk.gif');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
     margin: 0 auto;
-    animation: walk 0.8s step-end infinite;
     /* Remove old spinner styles */
     border: none;
     border-radius: 0;
-}
-
-@keyframes walk {
-    0% {
-        background-position: 0 0;
-    }
-
-    25% {
-        background-position: -64px 0;
-    }
-
-    50% {
-        background-position: 0 -64px;
-    }
-
-    75% {
-        background-position: -64px -64px;
-    }
 }
 
 .modal {
