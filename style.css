@@ -6,11 +6,12 @@
 }
 
 body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'VT323', monospace;
     background: linear-gradient(135deg, #10B981 0%, #047857 100%);
     min-height: 100vh;
     padding: 20px;
     color: #1f2937;
+    font-size: 1.25rem;
 }
 
 .container {
@@ -47,19 +48,20 @@ body {
 }
 
 .header h1 {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Press Start 2P', cursive;
     color: #065f46;
-    font-size: 2.8em;
-    margin-bottom: 8px;
-    line-height: 1.2;
-    font-weight: 700;
+    font-size: 1.8em;
+    margin-bottom: 12px;
+    line-height: 1.4;
+    font-weight: 400;
 }
 
 .header p {
     color: #4b5563;
-    font-size: 1.2em;
+    font-family: 'VT323', monospace;
+    font-size: 1.5em;
     font-weight: 400;
-    max-width: 600px;
+    max-width: 800px;
 }
 
 .language-switcher {
