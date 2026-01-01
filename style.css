@@ -379,22 +379,33 @@ tr:hover {
 }
 
 .spinner {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #10B981;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
+    width: 64px;
+    height: 64px;
+    background-image: url('pygmy_hippo_walk.png');
+    background-size: 128px 128px;
+    background-position: 0 0;
     margin: 0 auto;
+    animation: walk 0.8s step-end infinite;
+    /* Remove old spinner styles */
+    border: none;
+    border-radius: 0;
 }
 
-@keyframes spin {
+@keyframes walk {
     0% {
-        transform: rotate(0deg);
+        background-position: 0 0;
     }
 
-    100% {
-        transform: rotate(360deg);
+    25% {
+        background-position: -64px 0;
+    }
+
+    50% {
+        background-position: 0 -64px;
+    }
+
+    75% {
+        background-position: -64px -64px;
     }
 }
 
