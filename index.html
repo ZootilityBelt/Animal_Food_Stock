@@ -5,9 +5,443 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Animal Food Stock Management</title>
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="stylesheet" href="style.css">
-    <!-- STYLE_PLACEHOLDER -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .language-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .lang-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .config-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .config-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #764ba2;
+        }
+
+        .btn-secondary:hover {
+            background: #653c8a;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 12px 25px;
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab:hover {
+            transform: translateY(-2px);
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #667eea;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-card h3 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: #667eea;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -17,11 +451,8 @@
                 <button class="lang-btn active" onclick="switchLanguage('en')" id="langBtnEn">🇬🇧 EN</button>
                 <button class="lang-btn" onclick="switchLanguage('id')" id="langBtnId">🇮🇩 ID</button>
             </div>
-            <h1>
-                <img src="favicon.png" alt="Icon" style="height: 1.2em; vertical-align: middle; margin-right: 10px;">
-                <span data-lang-en="Animal Food Stock Management" data-lang-id="Manajemen Stok Makanan Hewan">Animal
-                    Food Stock Management</span>
-            </h1>
+            <h1 data-lang-en="🐾 Animal Food Stock Management" data-lang-id="🐾 Manajemen Stok Makanan Hewan">🐾 Animal
+                Food Stock Management</h1>
             <p data-lang-en="Track and manage your animal food inventory with ease"
                 data-lang-id="Kelola inventori makanan hewan Anda dengan mudah">Track and manage your animal food
                 inventory with ease</p>
@@ -34,8 +465,33 @@
                     data-lang-id="URL Web App Google Apps Script:">Google Apps Script Web App URL:</label>
                 <input type="text" id="apiUrl" placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">
             </div>
-            <button class="btn" onclick="saveApiUrl()" data-lang-en="Save Configuration"
-                data-lang-id="Simpan Konfigurasi">Save Configuration</button>
+            <button class="btn" onclick="saveApiUrl()" data-lang-en="Save & Test Connection"
+                data-lang-id="Simpan & Tes Koneksi">Save & Test Connection</button>
+
+            <details style="margin-top: 20px;">
+                <summary style="cursor: pointer; color: #667eea; font-weight: 600;">🔧 Troubleshooting Guide</summary>
+                <div
+                    style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; font-size: 0.9em;">
+                    <p><strong>If you see "Failed to fetch" error:</strong></p>
+                    <ol style="margin-left: 20px; line-height: 1.8;">
+                        <li><strong>Check URL format:</strong> Must end with <code>/exec</code> not <code>/dev</code>
+                        </li>
+                        <li><strong>Deployment settings:</strong> In Google Apps Script:
+                            <ul style="margin-left: 20px;">
+                                <li>Deploy → Manage deployments → Edit</li>
+                                <li>Execute as: <strong>Me</strong></li>
+                                <li>Who has access: <strong>Anyone</strong> ⚠️ IMPORTANT!</li>
+                            </ul>
+                        </li>
+                        <li><strong>Test directly:</strong> Open this URL in browser:<br>
+                            <code>YOUR_API_URL?action=getItemList</code><br>
+                            You should see JSON response
+                        </li>
+                        <li><strong>Clear cache:</strong> Try Ctrl+Shift+R (or Cmd+Shift+R) to hard refresh</li>
+                        <li><strong>Check console:</strong> Press F12 to see detailed error messages</li>
+                    </ol>
+                </div>
+            </details>
         </div>
 
         <div id="alertContainer"></div>
@@ -170,6 +626,14 @@
                             </option>
                             <option value="item" data-lang-en="Specific Item" data-lang-id="Item Spesifik">Specific Item
                             </option>
+                        </select>
+                    </div>
+                    <div class="input-group" id="itemSelectGroup" style="display: none;">
+                        <label for="comparisonItem" data-lang-en="Select Item" data-lang-id="Pilih Item">Select
+                            Item</label>
+                        <select id="comparisonItem" onchange="updateMonthlyComparison()">
+                            <option value="" data-lang-en="-- Select Item --" data-lang-id="-- Pilih Item --">-- Select
+                                Item --</option>
                         </select>
                     </div>
                 </div>
@@ -466,7 +930,1093 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <script src="script.js"></script>
+    <script>
+        let API_URL = localStorage.getItem('apiUrl') || '';
+        let itemsCache = [];
+        let chartInstances = {};
+        let currentLanguage = localStorage.getItem('language') || 'en';
+
+        // Translation object
+        const translations = {
+            en: {
+                goodStock: 'Good Stock (≥50)',
+                mediumStock: 'Medium Stock (10-49)',
+                lowStock: 'Low Stock (<10)',
+                stockIn: 'Stock In',
+                stockOut: 'Stock Out',
+                netChange: 'Net Change',
+                transactions: 'Transactions',
+                overallStockMovement: 'Overall Stock Movement',
+                byCategory: 'By Category',
+                specificItem: 'Specific Item',
+                active: 'Active',
+                inactive: 'Inactive',
+                view: 'View',
+                remove: 'Remove'
+            },
+            id: {
+                goodStock: 'Stok Baik (≥50)',
+                mediumStock: 'Stok Sedang (10-49)',
+                lowStock: 'Stok Rendah (<10)',
+                stockIn: 'Stok Masuk',
+                stockOut: 'Stok Keluar',
+                netChange: 'Perubahan Bersih',
+                transactions: 'Transaksi',
+                overallStockMovement: 'Pergerakan Stok Keseluruhan',
+                byCategory: 'Per Kategori',
+                specificItem: 'Item Spesifik',
+                active: 'Aktif',
+                inactive: 'Nonaktif',
+                view: 'Lihat',
+                remove: 'Hapus'
+            }
+        };
+
+        // Switch Language Function
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            localStorage.setItem('language', lang);
+
+            // Update button states
+            document.getElementById('langBtnEn').classList.toggle('active', lang === 'en');
+            document.getElementById('langBtnId').classList.toggle('active', lang === 'id');
+
+            // Update all translatable elements
+            const elements = document.querySelectorAll('[data-lang-en]');
+            elements.forEach(el => {
+                const enText = el.getAttribute('data-lang-en');
+                const idText = el.getAttribute('data-lang-id');
+
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    el.placeholder = lang === 'en' ? enText : idText;
+                } else if (el.tagName === 'OPTION') {
+                    el.textContent = lang === 'en' ? enText : idText;
+                } else {
+                    el.textContent = lang === 'en' ? enText : idText;
+                }
+            });
+
+            // Update select options
+            updateSelectOptions();
+        }
+
+        // Update select options text
+        function updateSelectOptions() {
+            const comparisonType = document.getElementById('comparisonType');
+            comparisonType.options[0].textContent = currentLanguage === 'en' ? 'Overall Stock Movement' : 'Pergerakan Stok Keseluruhan';
+            comparisonType.options[1].textContent = currentLanguage === 'en' ? 'By Category' : 'Per Kategori';
+            comparisonType.options[2].textContent = currentLanguage === 'en' ? 'Specific Item' : 'Item Spesifik';
+        }
+
+        // Get translation
+        function t(key) {
+            return translations[currentLanguage][key] || translations.en[key] || key;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            if (API_URL) {
+                document.getElementById('apiUrl').value = API_URL;
+                loadItemsForDropdown();
+            }
+
+            // Set today's date
+            document.getElementById('stockDate').valueAsDate = new Date();
+
+            // Set current year
+            const currentYear = new Date().getFullYear();
+            document.getElementById('reportYear').value = currentYear;
+            document.getElementById('itemReportYear').value = currentYear;
+
+            // Apply saved language
+            switchLanguage(currentLanguage);
+        });
+
+        // Save API URL
+        function saveApiUrl() {
+            const url = document.getElementById('apiUrl').value.trim();
+            if (!url) {
+                showAlert('Please enter API URL', 'error');
+                return;
+            }
+
+            // Validation
+            if (!url.includes('script.google.com')) {
+                showAlert('Invalid URL. Must be a Google Apps Script URL', 'error');
+                return;
+            }
+
+            if (!url.endsWith('/exec')) {
+                showAlert('Warning: URL should end with /exec (not /dev)', 'error');
+                return;
+            }
+
+            localStorage.setItem('apiUrl', url);
+            API_URL = url;
+            showAlert('API URL saved successfully! Testing connection...', 'success');
+
+            // Test connection
+            testApiConnection();
+        }
+
+        // Test API Connection
+        async function testApiConnection() {
+            try {
+                const result = await apiRequest({ action: 'getItemList' });
+                showAlert(`✅ Connection successful! Found ${result.count} items.`, 'success');
+                loadItemsForDropdown();
+            } catch (error) {
+                showAlert(`❌ Connection failed: ${error.message}`, 'error');
+                console.error('Connection test failed:', error);
+            }
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Alert system
+        function showAlert(message, type = 'info') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alertContainer.appendChild(alert);
+
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        // API Request Helper - Fixed for CORS
+        async function apiRequest(endpoint, method = 'GET', data = null) {
+            if (!API_URL) {
+                showAlert('Please configure API URL first', 'error');
+                throw new Error('API URL not configured');
+            }
+
+            try {
+                let url = API_URL;
+
+                if (method === 'GET') {
+                    // For GET requests, use URL parameters
+                    const params = new URLSearchParams(endpoint);
+                    url += '?' + params.toString();
+
+                    console.log('API GET Request:', url);
+
+                    // Simple fetch without custom headers to avoid CORS preflight
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        redirect: 'follow'
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+
+                    const result = await response.json();
+                    console.log('API Response:', result);
+
+                    if (result.status === 'error') {
+                        throw new Error(result.message);
+                    }
+
+                    return result;
+                } else {
+                    // For POST requests, encode data as URL parameters to avoid preflight
+                    const params = new URLSearchParams();
+                    for (const key in data) {
+                        if (data[key] !== null && data[key] !== undefined) {
+                            params.append(key, typeof data[key] === 'object' ? JSON.stringify(data[key]) : data[key]);
+                        }
+                    }
+
+                    url += '?' + params.toString();
+
+                    console.log('API POST Request:', url);
+
+                    // Use GET method with data in URL to avoid CORS preflight
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        redirect: 'follow'
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+
+                    const result = await response.json();
+                    console.log('API Response:', result);
+
+                    if (result.status === 'error') {
+                        throw new Error(result.message);
+                    }
+
+                    return result;
+                }
+            } catch (error) {
+                console.error('API Error Details:', {
+                    message: error.message,
+                    url: API_URL,
+                    method: method,
+                    endpoint: endpoint
+                });
+
+                // More specific error messages
+                if (error.message.includes('Failed to fetch')) {
+                    throw new Error('Cannot connect to API. Please check: 1) API URL is correct, 2) Google Apps Script is deployed as "Anyone can access", 3) URL ends with /exec');
+                } else if (error.message.includes('CORS')) {
+                    throw new Error('CORS error. Make sure your Google Apps Script is deployed with "Anyone can access"');
+                }
+
+                throw error;
+            }
+        }
+
+        // Load items for dropdown
+        async function loadItemsForDropdown() {
+            try {
+                const result = await apiRequest({ action: 'getItemList' });
+                itemsCache = result.data || [];
+
+                const stockItemSelect = document.getElementById('stockItem');
+                const reportItemSelect = document.getElementById('reportItemSelect');
+
+                stockItemSelect.innerHTML = '<option value="">-- Select Item --</option>';
+                reportItemSelect.innerHTML = '<option value="">-- Select Item --</option>';
+
+                itemsCache.forEach(item => {
+                    if (item.isActive !== false) {
+                        const option1 = new Option(`${item.itemName} (${item.itemId})`, item.itemId);
+                        const option2 = new Option(`${item.itemName} (${item.itemId})`, item.itemId);
+                        option1.dataset.item = JSON.stringify(item);
+                        option2.dataset.item = JSON.stringify(item);
+                        stockItemSelect.appendChild(option1);
+                        reportItemSelect.appendChild(option2);
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading items:', error);
+            }
+        }
+
+        // Update item details when selected
+        function updateItemDetails() {
+            const select = document.getElementById('stockItem');
+            const selectedOption = select.options[select.selectedIndex];
+            if (selectedOption.dataset.item) {
+                const item = JSON.parse(selectedOption.dataset.item);
+                // You can display unit or other info here if needed
+            }
+        }
+
+        // Stock Form Submission
+        document.getElementById('stockForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const select = document.getElementById('stockItem');
+            const selectedOption = select.options[select.selectedIndex];
+
+            if (!selectedOption.dataset.item) {
+                showAlert('Please select an item', 'error');
+                return;
+            }
+
+            const item = JSON.parse(selectedOption.dataset.item);
+            const masuk = parseFloat(document.getElementById('masuk').value) || 0;
+            const keluar = parseFloat(document.getElementById('keluar').value) || 0;
+
+            if (masuk === 0 && keluar === 0) {
+                showAlert('Please enter either Stock In or Stock Out value', 'error');
+                return;
+            }
+
+            const data = {
+                action: 'addStock',
+                date: document.getElementById('stockDate').value,
+                bonNo: document.getElementById('bonNo').value,
+                itemId: item.itemId,
+                itemName: item.itemName,
+                unit: item.unit,
+                source: document.getElementById('stockSource').value,
+                masuk: masuk,
+                keluar: keluar
+            };
+
+            try {
+                const result = await apiRequest(null, 'POST', data);
+                showAlert('Stock entry added successfully!', 'success');
+                resetStockForm();
+            } catch (error) {
+                showAlert('Error: ' + error.message, 'error');
+            }
+        });
+
+        // Reset stock form
+        function resetStockForm() {
+            document.getElementById('stockForm').reset();
+            document.getElementById('stockDate').valueAsDate = new Date();
+        }
+
+        // Load Dashboard
+        async function loadDashboard() {
+            const loading = document.getElementById('dashboardLoading');
+            const tbody = document.getElementById('dashboardBody');
+
+            loading.classList.add('active');
+
+            try {
+                const result = await apiRequest({ action: 'getCurrentStock' });
+                const stocks = result.data || [];
+
+                // Update stats
+                document.getElementById('totalItems').textContent = stocks.length;
+                const lowStock = stocks.filter(s => s.balance < 10).length;
+                document.getElementById('lowStock').textContent = lowStock;
+                const totalTx = stocks.reduce((sum, s) => sum + s.totalMasuk + s.totalKeluar, 0);
+                document.getElementById('totalValue').textContent = Math.round(totalTx);
+
+                // Populate table
+                tbody.innerHTML = '';
+                stocks.forEach(stock => {
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td>${stock.itemId}</td>
+                        <td>${stock.itemName}</td>
+                        <td>${stock.category}</td>
+                        <td>${stock.unit}</td>
+                        <td><strong>${stock.balance.toFixed(2)}</strong></td>
+                        <td>${stock.totalMasuk.toFixed(2)}</td>
+                        <td>${stock.totalKeluar.toFixed(2)}</td>
+                        <td>
+                            ${stock.balance < 10 ? `<span class="badge badge-danger">${t('lowStock')}</span>` :
+                            stock.balance < 50 ? '<span class="badge badge-warning">Medium</span>' :
+                                `<span class="badge badge-success">${t('goodStock')}</span>`}
+                        </td>
+                        <td>
+                            <button class="btn" onclick="viewItemDetails('${stock.itemId}')" style="padding: 8px 15px; font-size: 0.9em;">📊 ${t('view')}</button>
+                        </td>
+                    `;
+                });
+
+                showAlert('Dashboard loaded successfully!', 'success');
+            } catch (error) {
+                showAlert('Error loading dashboard: ' + error.message, 'error');
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: red;">Error loading data</td></tr>';
+            } finally {
+                loading.classList.remove('active');
+            }
+        }
+
+        // Filter dashboard table
+        function filterDashboardTable() {
+            const input = document.getElementById('dashboardSearch');
+            const filter = input.value.toLowerCase();
+            const tbody = document.getElementById('dashboardBody');
+            const rows = tbody.getElementsByTagName('tr');
+
+            for (let row of rows) {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(filter) ? '' : 'none';
+            }
+        }
+
+        // View item details
+        async function viewItemDetails(itemId) {
+            const modal = document.getElementById('itemDetailsModal');
+            const content = document.getElementById('itemDetailsContent');
+
+            content.innerHTML = '<div class="loading active"><div class="spinner"></div><p>Loading...</p></div>';
+            modal.classList.add('active');
+
+            try {
+                const result = await apiRequest({ action: 'getItemStock', itemId: itemId });
+
+                content.innerHTML = `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>${result.currentBalance.toFixed(2)}</h3>
+                            <p>Current Balance</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>${result.totalMasuk.toFixed(2)}</h3>
+                            <p>Total In</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>${result.totalKeluar.toFixed(2)}</h3>
+                            <p>Total Out</p>
+                        </div>
+                    </div>
+                    
+                    <h3 style="margin: 20px 0 10px 0;">Item Information</h3>
+                    <table>
+                        <tr><td><strong>Item ID:</strong></td><td>${result.item.itemId}</td></tr>
+                        <tr><td><strong>Item Name:</strong></td><td>${result.item.itemName}</td></tr>
+                        <tr><td><strong>Category:</strong></td><td>${result.item.category}</td></tr>
+                        <tr><td><strong>Unit:</strong></td><td>${result.item.unit}</td></tr>
+                    </table>
+                    
+                    <h3 style="margin: 20px 0 10px 0;">Recent Transactions (Last 10)</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>BON No</th>
+                                    <th>Source</th>
+                                    <th>In</th>
+                                    <th>Out</th>
+                                    <th>Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${result.transactions.slice(-10).reverse().map(tx => `
+                                    <tr>
+                                        <td>${new Date(tx.date).toLocaleDateString()}</td>
+                                        <td>${tx.bonNo}</td>
+                                        <td>${tx.source || '-'}</td>
+                                        <td>${tx.masuk > 0 ? tx.masuk.toFixed(2) : '-'}</td>
+                                        <td>${tx.keluar > 0 ? tx.keluar.toFixed(2) : '-'}</td>
+                                        <td>${tx.balance.toFixed(2)}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            } catch (error) {
+                content.innerHTML = `<div class="alert alert-error">Error: ${error.message}</div>`;
+            }
+        }
+
+        // Load Items
+        async function loadItems() {
+            const loading = document.getElementById('itemsLoading');
+            const tbody = document.getElementById('itemsBody');
+
+            loading.classList.add('active');
+
+            try {
+                const result = await apiRequest({ action: 'getItemList' });
+                itemsCache = result.data || [];
+
+                tbody.innerHTML = '';
+                itemsCache.forEach(item => {
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td>${item.itemId}</td>
+                        <td>${item.itemName}</td>
+                        <td>${item.category}</td>
+                        <td>${item.unit}</td>
+                        <td>
+                            ${item.isActive !== false ?
+                            `<span class="badge badge-success">${t('active')}</span>` :
+                            `<span class="badge badge-danger">${t('inactive')}</span>`}
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn" onclick="viewItemDetails('${item.itemId}')" style="padding: 8px 15px; font-size: 0.9em;">📊 ${t('view')}</button>
+                                ${item.isActive !== false ?
+                            `<button class="btn btn-danger" onclick="removeItem('${item.itemId}')" style="padding: 8px 15px; font-size: 0.9em;">🗑️ ${t('remove')}</button>` :
+                            ''}
+                            </div>
+                        </td>
+                    `;
+                });
+
+                loadItemsForDropdown();
+                showAlert('Items loaded successfully!', 'success');
+            } catch (error) {
+                showAlert('Error loading items: ' + error.message, 'error');
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Error loading data</td></tr>';
+            } finally {
+                loading.classList.remove('active');
+            }
+        }
+
+        // Filter items table
+        function filterItemsTable() {
+            const input = document.getElementById('itemsSearch');
+            const filter = input.value.toLowerCase();
+            const tbody = document.getElementById('itemsBody');
+            const rows = tbody.getElementsByTagName('tr');
+
+            for (let row of rows) {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(filter) ? '' : 'none';
+            }
+        }
+
+        // Open add item modal
+        function openAddItemModal() {
+            document.getElementById('addItemModal').classList.add('active');
+        }
+
+        // Add Item Form
+        document.getElementById('addItemForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const data = {
+                action: 'addItem',
+                itemId: document.getElementById('newItemId').value.trim(),
+                itemName: document.getElementById('newItemName').value.trim(),
+                category: document.getElementById('newItemCategory').value.trim(),
+                unit: document.getElementById('newItemUnit').value.trim()
+            };
+
+            try {
+                await apiRequest(null, 'POST', data);
+                showAlert('Item added successfully!', 'success');
+                closeModal('addItemModal');
+                document.getElementById('addItemForm').reset();
+                loadItems();
+            } catch (error) {
+                showAlert('Error: ' + error.message, 'error');
+            }
+        });
+
+        // Remove Item
+        async function removeItem(itemId) {
+            if (!confirm(`Are you sure you want to remove item ${itemId}? This will mark it as inactive.`)) {
+                return;
+            }
+
+            try {
+                await apiRequest(null, 'POST', { action: 'removeItem', itemId: itemId });
+                showAlert('Item removed successfully!', 'success');
+                loadItems();
+            } catch (error) {
+                showAlert('Error: ' + error.message, 'error');
+            }
+        }
+
+        // Load History
+        async function loadHistory() {
+            const loading = document.getElementById('historyLoading');
+            const tbody = document.getElementById('historyBody');
+            const limit = document.getElementById('historyLimit').value;
+
+            loading.classList.add('active');
+
+            try {
+                const result = await apiRequest({ action: 'getStockLog', limit: limit });
+                const logs = result.data || [];
+
+                tbody.innerHTML = '';
+                logs.forEach(log => {
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td>${new Date(log.date).toLocaleDateString()}</td>
+                        <td>${log.bonNo}</td>
+                        <td>${log.itemId}</td>
+                        <td>${log.itemName}</td>
+                        <td>${log.unit}</td>
+                        <td>${log.source || '-'}</td>
+                        <td>${log.masuk > 0 ? `<span class="badge badge-success">+${log.masuk}</span>` : '-'}</td>
+                        <td>${log.keluar > 0 ? `<span class="badge badge-danger">-${log.keluar}</span>` : '-'}</td>
+                    `;
+                });
+
+                showAlert('History loaded successfully!', 'success');
+            } catch (error) {
+                showAlert('Error loading history: ' + error.message, 'error');
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: red;">Error loading data</td></tr>';
+            } finally {
+                loading.classList.remove('active');
+            }
+        }
+
+        // Filter history table
+        function filterHistoryTable() {
+            const input = document.getElementById('historySearch');
+            const filter = input.value.toLowerCase();
+            const tbody = document.getElementById('historyBody');
+            const rows = tbody.getElementsByTagName('tr');
+
+            for (let row of rows) {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(filter) ? '' : 'none';
+            }
+        }
+
+        // Generate Monthly Report
+        async function generateMonthlyReport() {
+            const year = document.getElementById('reportYear').value;
+            const month = document.getElementById('reportMonth').value;
+
+            if (!confirm(`Generate report for ${year}-${month}?\n\nNote: This will run directly in your Google Sheets. You won't see the result here, but check your spreadsheet for a new sheet.`)) {
+                return;
+            }
+
+            showAlert('Report generation started... Please check your Google Sheets in a moment.', 'info');
+
+            try {
+                // Note: This would need to be called server-side
+                showAlert('To generate reports, you need to run the function directly in Google Apps Script or create a POST endpoint for it.', 'info');
+            } catch (error) {
+                showAlert('Error: ' + error.message, 'error');
+            }
+        }
+
+        // Open item report modal
+        function openItemReportModal() {
+            document.getElementById('itemReportModal').classList.add('active');
+        }
+
+        // Generate Item Report
+        document.getElementById('itemReportForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const itemId = document.getElementById('reportItemSelect').value;
+            const year = document.getElementById('itemReportYear').value;
+            const month = document.getElementById('itemReportMonth').value;
+
+            if (!itemId) {
+                showAlert('Please select an item', 'error');
+                return;
+            }
+
+            closeModal('itemReportModal');
+            showAlert('Item report generation started... Please check your Google Sheets in a moment.', 'info');
+
+            try {
+                showAlert('To generate item reports, you need to run the function directly in Google Apps Script or create a POST endpoint for it.', 'info');
+            } catch (error) {
+                showAlert('Error: ' + error.message, 'error');
+            }
+        });
+
+        // Close Modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Close modal on outside click
+        window.onclick = function (event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+
+        // ==========================================
+        // CHARTS AND ANALYTICS
+        // ==========================================
+
+        // Load Charts
+        async function loadCharts() {
+            const loading = document.getElementById('chartsLoading');
+            loading.classList.add('active');
+
+            try {
+                // Get all items
+                const result = await apiRequest({ action: 'getItemList' });
+                const items = result.data || [];
+
+                // Get stocks with details
+                const stockResult = await apiRequest({ action: 'getCurrentStock' });
+                const stocks = stockResult.data || [];
+
+                // Get logs for trend
+                const logResult = await apiRequest({ action: 'getStockLog', limit: 300 });
+                const logs = logResult.data || [];
+
+                // 1. Stock Balance by Category
+                updateCategoryChart(stocks);
+
+                // 2. Top 10 Items by Balance
+                updateTopItemsChart(stocks);
+
+                // 3. Stock In vs Out (Top 10)
+                updateInOutChart(stocks);
+
+                // 4. Status Distribution
+                updateStatusPieChart(stocks);
+
+                // 5. Recent Trend
+                updateTrendChart(logs);
+
+                // 6. Monthly Comparison (Initial load for overall)
+                updateMonthlyComparison();
+
+                // 7. Year over Year (Initial load)
+                updateYearOverYearChart();
+
+                showAlert('Charts updated successfully!', 'success');
+            } catch (error) {
+                showAlert('Error loading charts: ' + error.message, 'error');
+                console.error(error);
+            } finally {
+                loading.classList.remove('active');
+            }
+        }
+
+        // 1. Category Chart
+        function updateCategoryChart(stocks) {
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+
+            // Group by category
+            const categories = {};
+            stocks.forEach(item => {
+                if (!categories[item.category]) categories[item.category] = 0;
+                categories[item.category] += item.balance;
+            });
+
+            const labels = Object.keys(categories);
+            const data = Object.values(categories);
+
+            if (chartInstances.category) chartInstances.category.destroy();
+
+            chartInstances.category = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: t('stockIn'),
+                        data: data,
+                        backgroundColor: '#667eea',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: 'Total Stock by Category' }
+                    }
+                }
+            });
+        }
+
+        // 2. Top 10 Items Chart
+        function updateTopItemsChart(stocks) {
+            const ctx = document.getElementById('topItemsChart').getContext('2d');
+
+            // Sort by balance desc and take top 10
+            const sorted = [...stocks].sort((a, b) => b.balance - a.balance).slice(0, 10);
+
+            const labels = sorted.map(item => item.itemName);
+            const data = sorted.map(item => item.balance);
+
+            if (chartInstances.topItems) chartInstances.topItems.destroy();
+
+            chartInstances.topItems = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Current Stock',
+                        data: data,
+                        backgroundColor: '#764ba2',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        // 3. In vs Out Chart
+        function updateInOutChart(stocks) {
+            const ctx = document.getElementById('inOutChart').getContext('2d');
+
+            // Sort by activity (in + out) and take top 10
+            const sorted = [...stocks].sort((a, b) => (b.totalMasuk + b.totalKeluar) - (a.totalMasuk + a.totalKeluar)).slice(0, 10);
+
+            const labels = sorted.map(item => item.itemName);
+            const inData = sorted.map(item => item.totalMasuk);
+            const outData = sorted.map(item => item.totalKeluar);
+
+            if (chartInstances.inOut) chartInstances.inOut.destroy();
+
+            chartInstances.inOut = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: t('stockIn'),
+                            data: inData,
+                            backgroundColor: '#27ae60',
+                            borderRadius: 5
+                        },
+                        {
+                            label: t('stockOut'),
+                            data: outData,
+                            backgroundColor: '#e74c3c',
+                            borderRadius: 5
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: { stacked: false },
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        // 4. Status Pie Chart
+        function updateStatusPieChart(stocks) {
+            const ctx = document.getElementById('statusPieChart').getContext('2d');
+
+            const good = stocks.filter(s => s.balance >= 50).length;
+            const medium = stocks.filter(s => s.balance >= 10 && s.balance < 50).length;
+            const low = stocks.filter(s => s.balance < 10).length;
+
+            if (chartInstances.statusPie) chartInstances.statusPie.destroy();
+
+            chartInstances.statusPie = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [t('goodStock'), t('mediumStock'), t('lowStock')],
+                    datasets: [{
+                        data: [good, medium, low],
+                        backgroundColor: ['#27ae60', '#f39c12', '#e74c3c']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // 5. Trend Chart
+        function updateTrendChart(logs) {
+            const ctx = document.getElementById('trendChart').getContext('2d');
+
+            // Group by date (last 30 days)
+            const dates = {};
+            const today = new Date();
+
+            for (let i = 29; i >= 0; i--) {
+                const d = new Date(today);
+                d.setDate(d.getDate() - i);
+                const dateStr = d.toISOString().split('T')[0];
+                dates[dateStr] = { in: 0, out: 0 };
+            }
+
+            logs.forEach(log => {
+                const dateStr = new Date(log.date).toISOString().split('T')[0];
+                if (dates[dateStr]) {
+                    if (log.masuk > 0) dates[dateStr].in += 1; // Count transactions, not quantity
+                    if (log.keluar > 0) dates[dateStr].out += 1;
+                }
+            });
+
+            const labels = Object.keys(dates).map(d => {
+                const parts = d.split('-');
+                return `${parts[2]}/${parts[1]}`;
+            });
+
+            const inData = Object.values(dates).map(d => d.in);
+            const outData = Object.values(dates).map(d => d.out);
+
+            if (chartInstances.trend) chartInstances.trend.destroy();
+
+            chartInstances.trend = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: t('stockIn'),
+                            data: inData,
+                            borderColor: '#27ae60',
+                            tension: 0.4,
+                            fill: false
+                        },
+                        {
+                            label: t('stockOut'),
+                            data: outData,
+                            borderColor: '#e74c3c',
+                            tension: 0.4,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: { display: true, text: 'Daily Transaction Count (Last 30 Days)' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                    }
+                }
+            });
+        }
+
+        // Get Comparison Data for Monthly Chart
+        async function getMonthlyComparisonData(type, year, item = null) {
+            // Note: In a real app, you would ask the API for aggregated data.
+            // Here we'll simulate it by fetching logs for the year and aggregating client-side
+            // Be careful with large datasets!
+
+            try {
+                // Requesting a larger limit to calculate statistics
+                const result = await apiRequest({ action: 'getStockLog', limit: 1000 });
+                const logs = result.data || [];
+
+                const monthlyData = Array(12).fill(0).map(() => ({ in: 0, out: 0, net: 0 }));
+
+                logs.forEach(log => {
+                    const logDate = new Date(log.date);
+                    if (logDate.getFullYear() === parseInt(year)) {
+                        const month = logDate.getMonth(); // 0-11
+
+                        // Filter logic
+                        let include = true;
+                        if (type === 'item' && item && log.itemId !== item) include = false;
+                        if (type === 'category') {
+                            // Assuming we had category info in logs, or we'd need to look up item details
+                            // For simplicity in this standalone version, we might skip category filtering
+                            // or fetch item list to map IDs to categories
+                        }
+
+                        if (include) {
+                            if (log.masuk > 0) monthlyData[month].in += log.masuk;
+                            if (log.keluar > 0) monthlyData[month].out += log.keluar;
+                        }
+                    }
+                });
+
+                // Calculate net
+                monthlyData.forEach(d => d.net = d.in - d.out);
+
+                return monthlyData;
+            } catch (e) {
+                console.error("Error getting comparison data", e);
+                return Array(12).fill(0).map(() => ({ in: 0, out: 0, net: 0 }));
+            }
+        }
+
+        // populate Comparison Item Dropdown
+        document.getElementById('comparisonType').addEventListener('change', function () {
+            const type = this.value;
+            const itemGroup = document.getElementById('itemSelectGroup');
+
+            if (type === 'item') {
+                itemGroup.style.display = 'block';
+                loadItemsForDropdown(); // Ensure list is populated
+            } else {
+                itemGroup.style.display = 'none';
+            }
+        });
+
+        // 6. Monthly Comparison Chart
+        async function updateMonthlyComparison() {
+            const ctx = document.getElementById('monthlyComparisonChart').getContext('2d');
+            const type = document.getElementById('comparisonType').value;
+            const item = document.getElementById('comparisonItem').value;
+            const year = new Date().getFullYear(); // Current year
+
+            if (type === 'item' && !item) return; // Wait for selection
+
+            // Show loading state implicitly or explicitly
+
+            const data = await getMonthlyComparisonData(type, year, item);
+
+            const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+            if (chartInstances.monthly) chartInstances.monthly.destroy();
+
+            chartInstances.monthly = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: t('stockIn'),
+                            data: data.map(d => d.in),
+                            backgroundColor: '#27ae60'
+                        },
+                        {
+                            label: t('stockOut'),
+                            data: data.map(d => d.out),
+                            backgroundColor: '#e74c3c'
+                        },
+                        {
+                            label: t('netChange'),
+                            data: data.map(d => d.net),
+                            type: 'line',
+                            borderColor: '#667eea',
+                            borderWidth: 2,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: { display: true, text: `Monthly Movement (${year})` }
+                    }
+                }
+            });
+        }
+
+        // 7. Year-over-Year Chart
+        async function updateYearOverYearChart() {
+            const ctx = document.getElementById('yoyChart').getContext('2d');
+            const year1 = document.getElementById('yoyYear1').value;
+            const year2 = document.getElementById('yoyYear2').value;
+
+            const data1 = await getMonthlyComparisonData('overall', year1);
+            const data2 = await getMonthlyComparisonData('overall', year2);
+
+            // We'll compare Net Change
+            const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+            if (chartInstances.yoy) chartInstances.yoy.destroy();
+
+            chartInstances.yoy = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: `${year1} Net Change`,
+                            data: data1.map(d => d.net),
+                            borderColor: '#95a5a6',
+                            tension: 0.3,
+                            fill: false
+                        },
+                        {
+                            label: `${year2} Net Change`,
+                            data: data2.map(d => d.net),
+                            borderColor: '#667eea',
+                            tension: 0.3,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: { display: true, text: `Net Stock Change Comparison (${year1} vs ${year2})` }
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>
