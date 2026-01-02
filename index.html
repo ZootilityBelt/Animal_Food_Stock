@@ -557,6 +557,24 @@
             <div class="language-switcher">
                 <button class="lang-btn active" onclick="switchLanguage('en')" id="langBtnEn">🇬🇧 EN</button>
                 <button class="lang-btn" onclick="switchLanguage('id')" id="langBtnId">🇮🇩 ID</button>
+                <div class="menu-container" style="position: relative; display: inline-block;">
+                    <button class="lang-btn menu-btn" onclick="toggleMenu()" id="menuBtn">☰ Menu</button>
+                    <div id="dropdownMenu" class="dropdown-content">
+                        <a href="docs.html" class="menu-link" data-lang-en="📚 Documentation"
+                            data-lang-id="📚 Dokumentasi">📚
+                            Documentation</a>
+                        <div class="menu-divider"></div>
+                        <h4 data-lang-en="💬 Feedback" data-lang-id="💬 Masukan">💬 Feedback</h4>
+                        <form action="https://formspree.io/f/xwvplajl" method="POST" class="feedback-form">
+                            <input type="email" name="email" placeholder="Your email (optional)"
+                                style="width: 100%; margin-bottom: 8px; padding: 6px; border: 1px solid #ddd; border-radius: 4px;">
+                            <textarea name="message" placeholder="Your feedback..." required
+                                style="width: 100%; margin-bottom: 8px; padding: 6px; border: 1px solid #ddd; border-radius: 4px; min-height: 60px;"></textarea>
+                            <button type="submit" class="btn btn-sm"
+                                style="width: 100%; padding: 6px; font-size: 0.9em;">Send</button>
+                        </form>
+                    </div>
+                </div>
             </div>
             <div class="header-content">
                 <img src="icon.png" alt="Icon" class="header-icon">
@@ -1718,9 +1736,28 @@
         }
 
         // Close modal on outside click
+        // Toggle Menu
+        function toggleMenu() {
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close modal and menu on outside click
         window.onclick = function (event) {
+            // Close modal
             if (event.target.classList.contains('modal')) {
                 event.target.classList.remove('active');
+            }
+
+            // Close menu if clicked outside
+            if (!event.target.matches('.menu-btn') && !event.target.closest('.dropdown-content')) {
+                const dropdowns = document.getElementsByClassName("dropdown-content");
+                for (let i = 0; i < dropdowns.length; i++) {
+                    const openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
             }
         }
 

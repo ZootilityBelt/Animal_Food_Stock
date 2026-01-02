@@ -650,9 +650,28 @@ function closeModal(modalId) {
 }
 
 // Close modal on outside click
+// Toggle Menu
+function toggleMenu() {
+    const dropdown = document.getElementById('dropdownMenu');
+    dropdown.classList.toggle('show');
+}
+
+// Close modal and menu on outside click
 window.onclick = function (event) {
+    // Close modal
     if (event.target.classList.contains('modal')) {
         event.target.classList.remove('active');
+    }
+
+    // Close menu if clicked outside
+    if (!event.target.matches('.menu-btn')) {
+        const dropdowns = document.getElementsByClassName("dropdown-content");
+        for (let i = 0; i < dropdowns.length; i++) {
+            const openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
     }
 }
 

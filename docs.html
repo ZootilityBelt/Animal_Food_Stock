@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Animal Food Stock Management – Documentation</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+            color: #212529;
+        }
+
+        header {
+            background: #1f2937;
+            color: #ffffff;
+            padding: 1.5rem;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        header p {
+            margin: 0.3rem 0 0;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: #e5e7eb;
+            padding: 1rem;
+        }
+
+        nav a {
+            margin-right: 1rem;
+            text-decoration: none;
+            color: #1f2937;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            max-width: 900px;
+            margin: auto;
+            padding: 2rem 1.5rem;
+            background: #ffffff;
+        }
+
+        section {
+            margin-bottom: 2.5rem;
+        }
+
+        h2 {
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 0.4rem;
+            margin-top: 2rem;
+        }
+
+        ul {
+            margin-left: 1.5rem;
+        }
+
+        footer {
+            background: #1f2937;
+            color: #ffffff;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .lang-toggle {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .lang-toggle button {
+            margin-right: 0.5rem;
+            padding: 0.4rem 0.8rem;
+            border: none;
+            cursor: pointer;
+            background: #374151;
+            color: #ffffff;
+        }
+
+        .lang-toggle button:hover {
+            background: #111827;
+        }
+
+        .lang {
+            display: none;
+        }
+
+        .lang.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Animal Food Stock Management</h1>
+        <p>Documentation & User Guide</p>
+        <div class="lang-toggle">
+            <button onclick="showLang('en')">English</button>
+            <button onclick="showLang('id')">Bahasa Indonesia</button>
+        </div>
+    </header>
+
+    <nav>
+        <a href="#overview">Overview</a>
+        <a href="#features">Features</a>
+        <a href="#usage">Usage</a>
+        <a href="#security">Security</a>
+    </nav>
+
+    <main>
+
+        <!-- ENGLISH -->
+
+        <div id="en" class="lang active">
+
+            ```
+            <section id="overview">
+                <h2>Overview</h2>
+                <p><strong>Animal Food Stock Management</strong> is a web-based system designed to help track and manage
+                    animal food inventory for zoos, wildlife parks, and animal facilities.</p>
+                <p>The application runs as a static website and connects securely to Google Sheets using Google Apps
+                    Script.</p>
+            </section>
+
+            <section id="features">
+                <h2>Key Features</h2>
+                <ul>
+                    <li>Dashboard overview of stock status</li>
+                    <li>Item management (add & edit items)</li>
+                    <li>Stock in and stock out recording</li>
+                    <li>Transaction history</li>
+                    <li>Analytics and charts</li>
+                    <li>Report generation in Google Sheets</li>
+                </ul>
+            </section>
+
+            <section id="usage">
+                <h2>How to Use</h2>
+                <ul>
+                    <li>Configure the Google Apps Script Web App URL</li>
+                    <li>Add food items in Item Management</li>
+                    <li>Record stock movements using Stock Entry</li>
+                    <li>Review history and analytics regularly</li>
+                </ul>
+            </section>
+
+            <section id="security">
+                <h2>Security Notes</h2>
+                <ul>
+                    <li>This is a static frontend hosted on GitHub Pages</li>
+                    <li>Backend access depends on Google Apps Script permissions</li>
+                    <li>It is recommended to use API tokens and input validation</li>
+                    <li>Not recommended for public access without authentication</li>
+                </ul>
+            </section>
+            ```
+
+        </div>
+
+        <!-- INDONESIAN -->
+
+        <div id="id" class="lang">
+
+            ```
+            <section>
+                <h2>Gambaran Umum</h2>
+                <p><strong>Animal Food Stock Management</strong> adalah sistem berbasis web untuk membantu pencatatan
+                    dan pengelolaan stok pakan satwa di kebun binatang dan fasilitas satwa.</p>
+                <p>Aplikasi ini berjalan sebagai website statis dan terhubung ke Google Sheets melalui Google Apps
+                    Script.</p>
+            </section>
+
+            <section>
+                <h2>Fitur Utama</h2>
+                <ul>
+                    <li>Dashboard ringkasan stok</li>
+                    <li>Manajemen item pakan</li>
+                    <li>Pencatatan stok masuk dan keluar</li>
+                    <li>Riwayat transaksi</li>
+                    <li>Grafik dan analitik</li>
+                    <li>Pembuatan laporan di Google Sheets</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Cara Penggunaan</h2>
+                <ul>
+                    <li>Konfigurasikan URL Web App Google Apps Script</li>
+                    <li>Tambahkan item pakan pada menu Manajemen Item</li>
+                    <li>Catat pergerakan stok melalui Entri Stok</li>
+                    <li>Tinjau riwayat dan grafik secara berkala</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Catatan Keamanan</h2>
+                <ul>
+                    <li>Frontend bersifat statis dan di-host di GitHub Pages</li>
+                    <li>Akses backend bergantung pada pengaturan Google Apps Script</li>
+                    <li>Disarankan menggunakan token API dan validasi input</li>
+                    <li>Tidak disarankan untuk akses publik tanpa autentikasi</li>
+                </ul>
+            </section>
+            ```
+
+        </div>
+
+    </main>
+
+    <footer>
+        Developed by Abdul Fattah<br />
+        Animal Food Stock Management
+    </footer>
+
+    <script>
+        function showLang(lang) {
+            document.querySelectorAll('.lang').forEach(el => el.classList.remove('active'));
+            document.getElementById(lang).classList.add('active');
+        }
+    </script>
+
+</body>
+
+</html>
